@@ -3,7 +3,7 @@ sequenceDiagram
     participant browser
     participant server
 
-    Note right of browser: User navigates to the SPA site the first time with cache turned on
+    Note right of browser: User navigates to the SPA site the first time with cache off
 
     browser->>server:   GET https://studies.cs.helsinki.fi/exampleapp/spa
     activate server
