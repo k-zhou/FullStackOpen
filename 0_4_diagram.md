@@ -3,7 +3,7 @@ sequenceDiagram
     participant browser
     participant server
 
-    Note right of browser: user writes a new note and presses "SEND"
+    Note right of browser: user writes a new note and presses "SEND" with cache off
 
     browser->>server:   POST https://studies.cs.helsinki.fi/exampleapp/new_note
     activate server
@@ -14,12 +14,12 @@ sequenceDiagram
 
     browser->>server:   GET https://studies.cs.helsinki.fi/exampleapp/main.css
     activate server
-    server-->>browser:  [304] file unchanged, no payload sent
+    server-->>browser:  [200] transmits CSS payload
     deactivate server
 
     browser->>server:   GET https://studies.cs.helsinki.fi/exampleapp/main.js
     activate server
-    server-->>browser:  [304] file unchanged, no payload sent
+    server-->>browser:  [200] transmits JS payload
     deactivate server
 
     browser->>server:   GET https://studies.cs.helsinki.fi/exampleapp/data.json
