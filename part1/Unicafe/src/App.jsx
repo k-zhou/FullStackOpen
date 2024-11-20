@@ -1,6 +1,14 @@
 import { useState } from 'react'
 
 const Statistics = ({statisticsObj}) => {
+  const good     = statisticsObj.good
+  const neutral  = statisticsObj.neutral
+  const bad      = statisticsObj.bad
+  const all     = (good + neutral + bad)
+  const denom    = all == 0 ? 1 : all
+  const average  = (good - bad) / denom
+  const positive = good / denom
+
   return (
     <div>
       <h1>Statistics</h1>
@@ -8,15 +16,27 @@ const Statistics = ({statisticsObj}) => {
         <tbody>
           <tr>
             <td>Good</td>
-            <td>{statisticsObj.good}</td>
+            <td>{good}</td>
           </tr>
           <tr>
             <td>Neutral</td>
-            <td>{statisticsObj.neutral}</td>
+            <td>{neutral}</td>
           </tr>
           <tr>
             <td>Bad</td>
-            <td>{statisticsObj.bad}</td>
+            <td>{bad}</td>
+          </tr>
+          <tr>
+            <td>All</td>
+            <td>{all}</td>
+          </tr>
+          <tr>
+            <td>Average</td>
+            <td>{average}</td>
+          </tr>
+          <tr>
+            <td>Positive</td>
+            <td>{positive}</td>
           </tr>
         </tbody>
       </table>
