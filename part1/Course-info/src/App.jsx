@@ -30,9 +30,12 @@ const Content = ({course}) => {
 const Total = ({course}) => {
   let sum = 0
   course.parts.forEach(part => sum = sum + part.exercises)
+  const text = sum == 1 ? `To a total of ${sum} exercise.` : `To a total of ${sum} exercises.` // accomodates English grammar on plurality
   return (
     <p>
-      Total number of exercises: {sum}
+      <b>
+        {text}
+      </b>
     </p>
   )
 }
