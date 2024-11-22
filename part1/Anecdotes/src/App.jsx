@@ -37,7 +37,7 @@ const Anecdotes = () => {
     return
   }
   
-  // # Find the most voted anecdote, or collect the multiple tied and randomly pick one of them, returns its index
+  // # Find the most voted anecdote, or collect the multiple tied and returns their indices as an array
   const findMostVoted = () => {
     let most    = 0
     let collect = []
@@ -50,7 +50,7 @@ const Anecdotes = () => {
         collect.push(i)
       }
     }
-    return collect[getRandomInt(collect.length)]
+    return collect
   }
   
   const handleVoteClick = () => {
@@ -64,7 +64,10 @@ const Anecdotes = () => {
   const voteString = votes[selected] == 1 ? `This anecdote has ${votes[selected]} vote.` : 
                                             `This anecdote has ${votes[selected]} votes.`
 
-  const mostVotedAnecdote = anecdotes[findMostVoted()]
+  const mostVotedAnecdotes     = findMostVoted()
+  const mostVotedAnecdoteTitle = mostVotedAnecdotes.length > 1 ? "The anecdotes with the most votes" :
+                                                                 "The anecdote with the most votes"
+  const mostVotedAnecdoteText  = anecdotes[mostVotedAnecdotes[getRandomInt(mostVotedAnecdotes.length)]]
 
   return (
     <div>
@@ -73,8 +76,8 @@ const Anecdotes = () => {
       <p>{voteString}</p>
       <button onClick={handleVoteClick}>Vote</button>
       <button onClick={handleRandomAnecdoteClick}>Next anecdote</button>
-      <h1>The anecdote with the most votes</h1>
-      <p>{mostVotedAnecdote}</p>
+      <h1>{mostVotedAnecdoteTitle}</h1>
+      <p>{mostVotedAnecdoteText}</p>
     </div>
   )
 }
