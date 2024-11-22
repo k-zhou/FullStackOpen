@@ -1,13 +1,11 @@
 
-const Header = ({course}) => {
+const CourseHeader = ({course}) => {
   return (
-    <h1>
-      {course.name}
-    </h1>
+    <h2>{course.name}</h2>
   )
 }
 
-const Part = ({name, exercises}) => {
+const CoursePart = ({name, exercises}) => {
   return (
     <tr>
       <td>{name}</td> 
@@ -16,18 +14,18 @@ const Part = ({name, exercises}) => {
   )
 }
 
-const Content = ({course}) => {
+const CourseContent = ({course}) => {
   return (
     <div>
       <table>
         <tbody>
-          {course.parts.map(part => <Part name={part.name} exercises={part.exercises}/>)}
+          {course.parts.map(part => <CoursePart name={part.name} exercises={part.exercises}/>)}
         </tbody>
       </table>
     </div>
   )
 }
-const Total = ({course}) => {
+const CourseTotal = ({course}) => {
   const initValue = 0
   const sum = course.parts.reduce((accumulator, currentElement) => accumulator + currentElement.exercises, initValue)
   const text = sum == 1 ? `To a total of ${sum} exercise.` : `To a total of ${sum} exercises.` // accomodates English grammar on plurality
@@ -40,38 +38,71 @@ const Total = ({course}) => {
   )
 }
 
-
+const Course = ({course}) => {
+  return (
+    <div>
+      <CourseHeader  course={course} />
+      <CourseContent course={course} />
+      <CourseTotal   course={course} />
+    </div>
+  )
+}
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      },
-      {
-        name: "Server interaction",
-        exercises: 19
-      }
-    ]
-  }
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
+        }
+      ]
+    }, 
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    }
+  ]
+
+  const course = courses[0] // placeholder
 
   return (
     <div>
-      <Header  course={course} />
-      <Content course={course} />
-      <Total   course={course} />
+      <h1>Web development curriculum</h1>
+      {courses.map(course => <Course course={course}/>)}
     </div>
   )
+  // semantic satiation blaaaargh
 }
 
 export default App
