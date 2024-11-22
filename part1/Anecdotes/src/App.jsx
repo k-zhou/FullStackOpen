@@ -10,7 +10,6 @@ const getRandomInt = (max) => {
 
 const Anecdotes = () => {
 
-  const [selected, setSelected] = useState(0)
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -21,18 +20,41 @@ const Anecdotes = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
+  const [selected, setSelected] = useState(0)
+  
+  // # Observations with using objects: While objects may resemble Python dict structures, they're much more difficult to use in that I have yet to find a way to make objects access keys from the value of variables, instead of treating the variables' names as keys. This means declaring an int variable i and using it to iteratively add/update an object's key-value pairs is not possible afaik.
+  // # Oh so in JS they're called Maps 
+  // # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map#objects_vs._maps
 
-  const selectRandomAnecdote = () => {
+  const [votes,    setVotes]    = useState(Array(anecdotes.length).fill(0))
+  // # Note if you want to create an array using some specific elements, use the .of()
+  
+  // console.log(votes)
+
+  const handleRandomAnecdoteClick = () => {
     const target = getRandomInt(anecdotes.length)
-    console.log(target)
     setSelected(target)
-    return true
+    return
   }
+  
+  const handleVoteClick = () => {
+    let newVotes = Array.from(votes) // creates a copy
+    newVotes[selected] ++
+    // console.log("Old: ", votes, "New: ", newVotes)
+    setVotes(newVotes)
+    return
+  }
+
+  const voteString = votes[selected] == 1 ? `This anecdote has ${votes[selected]} vote.` : 
+                                            `This anecdote has ${votes[selected]} votes.`
+
   return (
     <div>
       <h1>Anecdotes</h1>
       <p>{anecdotes[selected]}</p>
-      <button onClick={selectRandomAnecdote}>Next anecdote</button>
+      <p>{voteString}</p>
+      <button onClick={handleVoteClick}>Vote</button>
+      <button onClick={handleRandomAnecdoteClick}>Next anecdote</button>
     </div>
   )
 }
