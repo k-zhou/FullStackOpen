@@ -28,8 +28,8 @@ const Content = ({course}) => {
   )
 }
 const Total = ({course}) => {
-  let sum = 0
-  course.parts.forEach(part => sum = sum + part.exercises)
+  const initValue = 0
+  const sum = course.parts.reduce((accumulator, currentElement) => accumulator + currentElement.exercises, initValue)
   const text = sum == 1 ? `To a total of ${sum} exercise.` : `To a total of ${sum} exercises.` // accomodates English grammar on plurality
   return (
     <p>
