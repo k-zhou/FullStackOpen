@@ -1,35 +1,38 @@
 
-const Header = (props) => {
+const Header = ({course}) => {
   return (
     <h1>
-      {props.course.name}
+      {course.name}
     </h1>
   )
 }
 
-const Part = (props) => {
+const Part = ({name, exercises}) => {
   return (
-    <p>
-      {props.part} {props.exercise}
-    </p>
+    <tr>
+      <td>{name}</td> 
+      <td>[ {exercises} ]</td>
+    </tr>
   )
 }
 
-const Content = (props) => {
+const Content = ({course}) => {
   return (
     <div>
-      <Part part={props.course.parts[0].name} exercise={props.course.parts[0].exercises}/>
-      <Part part={props.course.parts[1].name} exercise={props.course.parts[1].exercises}/>
-      <Part part={props.course.parts[2].name} exercise={props.course.parts[2].exercises}/>
+      <table>
+        <tbody>
+          {course.parts.map(part => <Part name={part.name} exercises={part.exercises}/>)}
+        </tbody>
+      </table>
     </div>
   )
 }
-const Total = (props) => {
+const Total = ({course}) => {
   let sum = 0
-  props.course.parts.forEach(part => sum = sum + part.exercises)
+  course.parts.forEach(part => sum = sum + part.exercises)
   return (
     <p>
-      Number of exercises {sum}
+      Total number of exercises: {sum}
     </p>
   )
 }
@@ -51,6 +54,10 @@ const App = () => {
       {
         name: 'State of a component',
         exercises: 14
+      },
+      {
+        name: "Server interaction",
+        exercises: 19
       }
     ]
   }
