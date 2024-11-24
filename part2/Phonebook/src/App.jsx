@@ -6,7 +6,7 @@ const NumbersList = ({list}) => {
     <div>
       <h2>Numbers</h2>
       <ul>
-        {list.map(item => <li key={item.id}>{item.name}</li>)}
+        {list.map(person => <li key={person.id}>{person.name} ( {person.number} )</li>)}
       </ul>
     </div>
   )
@@ -14,34 +14,36 @@ const NumbersList = ({list}) => {
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas',   id: 0 },
-    { name: 'Ada Lovelace',  id: 1 },
-    { name: 'Alonso Church', id: 2 },
-    { name: 'Alan Turing',   id: 3 }
+    { name: 'Arto Hellas', number: '333',   id: 0 },
+    { name: 'Ada Lovelace', number: '341',  id: 1 },
+    { name: 'Alonso Church', number: '131', id: 2 },
+    { name: 'Alan Turing', number: '321',   id: 3 }
   ]) 
-  const [newName, setNewName] = useState('')
+  const [newPersonName,   setnewPersonName  ] = useState('')
+  const [newPersonNumber, setnewPersonNumber] = useState('')
 
   const [IDCounter, setIDCounter] = useState(4)
 
   const handleInputChange = (event) => {
-    setNewName(event.target.value)
+    setnewPersonName(event.target.value)
   }
   
   const handleSubmit = (event) => {
     event.preventDefault()
     console.log('button clicked', event.target)
     // check for potential duplicate submission, add if new unique name, else show error message
-    if (persons.find(p => p.name === newName) === undefined ) {
+    if (persons.find(p => p.name === newPersonName) === undefined ) {
       const newPerson = {
-        name: newName,
-        id: IDCounter
+        name:   newPersonName,
+        number: newPersonNumber,
+        id:     IDCounter
 
       }
       setPersons(persons.concat(newPerson))
       setIDCounter(IDCounter + 1)
     }
     else {
-      alert(`${newName} already exists in the phonebook!`)
+      alert(`${newPersonName} already exists in the phonebook!`)
     }
   }
 
@@ -49,15 +51,32 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          name: <input 
-                  value={newName}
-                  onChange={handleInputChange}
-                />
-        </div>
-        <div>
-          debug: {newName}
-        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                name:
+              </td>
+              <td>
+                <input 
+                      value={newPersonName}
+                      onChange={(event) => {setnewPersonName(event.target.value)}}
+                    />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                number:
+              </td>
+              <td>
+                <input 
+                      value={newPersonNumber}
+                      onChange={(event) => {setnewPersonNumber(event.target.value)}}
+                    />
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <div>
           <button type="submit">add</button>
         </div>
