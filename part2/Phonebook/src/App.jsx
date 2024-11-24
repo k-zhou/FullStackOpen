@@ -30,14 +30,19 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     console.log('button clicked', event.target)
-    const newPerson = {
-      name: newName,
-      id: IDCounter
+    // check for potential duplicate submission, add if new unique name, else show error message
+    if (persons.find(p => p.name === newName) === undefined ) {
+      const newPerson = {
+        name: newName,
+        id: IDCounter
 
+      }
+      setPersons(persons.concat(newPerson))
+      setIDCounter(IDCounter + 1)
     }
-
-    setPersons(persons.concat(newPerson))
-    setIDCounter(IDCounter + 1)
+    else {
+      alert(`${newName} already exists in the phonebook!`)
+    }
   }
 
   return (
