@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { nanoid   } from 'nanoid'   // use with nanoid(x) where x is the optional argument for size/length
 
-const NumbersList = ({list}) => {
+const NumbersList = ({list, filter}) => {
   return (
     <div>
       <h2>Numbers</h2>
       <ul>
-        {list.map(person => <li key={person.id}>{person.name} ( {person.number} )</li>)}
+        {list.filter((person) => person.name.toLowerCase().includes(filter)).map(person => <li key={person.id}>{person.name} ( {person.number} )</li>)}
       </ul>
     </div>
   )
@@ -23,10 +23,7 @@ const App = () => {
   const [newPersonNumber, setnewPersonNumber] = useState('')
 
   const [IDCounter, setIDCounter] = useState(4)
-
-  const handleInputChange = (event) => {
-    setnewPersonName(event.target.value)
-  }
+  const [filter,    setfilter]    = useState('')
   
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -49,7 +46,13 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      Filter names: 
+      <input 
+        value={filter}
+        onChange={(event) => {setfilter(event.target.value)}}>
+      </input>
+      <h2>Add a new entry</h2>
       <form onSubmit={handleSubmit}>
         <table>
           <tbody>
@@ -81,7 +84,7 @@ const App = () => {
           <button type="submit">add</button>
         </div>
       </form>
-      <NumbersList list={persons} />
+      <NumbersList list={persons} filter={filter} />
     </div>
   )
 }
