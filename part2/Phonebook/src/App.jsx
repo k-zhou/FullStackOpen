@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
-import { nanoid   } from 'nanoid'   // use with nanoid(x) where x is the optional argument for size/length
-import axios    from 'axios'
+import { nanoid   }       from 'nanoid'   // use with nanoid(x) where x is the optional argument for size/length
+import personsService     from './personsService'
 
-const SERVER_ADDRESS = 'http://localhost:3001/persons'
 
 const FilterPrompt = ({stateGetter, stateSetter}) => {
   return (
@@ -33,11 +32,9 @@ const PersonForm = ({peopleList, peopleListSetter, idCounter, idCounterSetter}) 
 
       }
 
-      axios
-        .post(SERVER_ADDRESS, newPerson)
-        .then(response => {
-          console.log(response)
-        })
+      personsService.create(newPerson).then(response => {
+        console.log(response)
+      })
 
       peopleListSetter(peopleList.concat(newPerson))
       idCounterSetter(idCounter + 1)
@@ -109,11 +106,9 @@ const App = () => {
   }
 
   useEffect( () => {
-    axios
-      .get(SERVER_ADDRESS)
-      .then(response => {
-        updatePersons(response.data)
-      })
+    personsService.getAll().then(response => {
+      updatePersons(response.data)
+    })
   }, [])
 
   return (
