@@ -26,10 +26,9 @@ const PersonForm = ({peopleList, peopleListSetter, idCounter, idCounterSetter}) 
     // check for potential duplicate submission, add if new unique name, else show error message
     if (peopleList.find(p => p.name === newPersonName) === undefined ) {
       const newPerson = {
+        id:     idCounter,
         name:   newPersonName,
-        number: newPersonNumber,
-        id:     idCounter
-
+        number: newPersonNumber
       }
 
       personsService.create(newPerson).then(response => {
