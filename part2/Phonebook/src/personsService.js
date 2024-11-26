@@ -10,12 +10,17 @@ const create = (newObj) => {
     return axios.post(SERVER_ADDRESS, newObj)
 }
 
-const update = (newObj) => {
-    return axios.put(`${SERVER_ADDRESS}/${newObj.id}`, newObj)
+const update = (newObj, id) => {
+    return axios.put(`${SERVER_ADDRESS}/${id}`, newObj).catch(response => `$Error: ${response.data}`)
+}
+
+const remove = (id) => {
+    return axios.delete(`${SERVER_ADDRESS}/${id}`).catch(response => `$Error: ${response.data}`)
 }
 
 export default {
     getAll: getAll, 
     create: create, 
-    update: update 
+    update: update,
+    remove: remove
 }

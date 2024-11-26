@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react'
 import { nanoid   }       from 'nanoid'   // use with nanoid(x) where x is the optional argument for size/length
 import personsService     from './personsService'
 
+const Button = ({onClick, children}) => {
+  return (
+    <button onClick={onClick}>{children}</button>
+  )
+}
 
 const FilterPrompt = ({stateGetter, stateSetter}) => {
   return (
@@ -15,28 +20,28 @@ const FilterPrompt = ({stateGetter, stateSetter}) => {
   )
 }
 
-const PersonForm = ({peopleList, peopleListSetter, idCounter, idCounterSetter}) => {
+const PersonForm = ({peopleList, peopleListSetter}) => {
 
   const [newPersonName,   setnewPersonName  ] = useState('')
   const [newPersonNumber, setnewPersonNumber] = useState('')
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log('button clicked', event.target)
+    console.log('submit button clicked', event.target)
     // check for potential duplicate submission, add if new unique name, else show error message
     if (peopleList.find(p => p.name === newPersonName) === undefined ) {
       const newPerson = {
-        id:     idCounter,
         name:   newPersonName,
         number: newPersonNumber
       }
-
-      personsService.create(newPerson).then(response => {
-        console.log(response)
+      // sends this to the server, takes the id from the response and assigns it to the object
+      personsService
+        .create(newPerson)
+        .then(response => {
+          console.log(response)
+          peopleListSetter(peopleList.concat({...newPerson, id: response.data.id}))
       })
-
-      peopleListSetter(peopleList.concat(newPerson))
-      idCounterSetter(idCounter + 1)
+      
     }
     else {
       alert(`${newPersonName} already exists in the phonebook!`)
@@ -81,12 +86,23 @@ const PersonForm = ({peopleList, peopleListSetter, idCounter, idCounterSetter}) 
   )
 }
 
-const NumbersList = ({list, filter}) => {
+const NumbersList = ({list, setlist, filter}) => {
+  
+  const handleRemove = (id, name) => {
+    if (window.confirm(`Are you sure to remove ${name}?`)) {
+      const p = personsService.remove(id)
+      p.then(response => {if (response.status === 200) setlist(list.filter(item => item.id != id)); else return false})
+    }
+      return true
+  }
+
   return (
     <div>
       <h2>Numbers</h2>
       <ul>
-        {list.filter((person) => person.name.toLowerCase().includes(filter)).map(person => <li key={person.id}>{person.name} ( {person.number} )</li>)}
+        {list
+          .filter((person) => person.name.toLowerCase().includes(filter))
+          .map(person => <li key={person.id}>{person.name} ( {person.number} ) <Button onClick={() => handleRemove(person.id, person.name)} children={'delete'} /></li>)}
       </ul>
     </div>
   )
@@ -95,13 +111,11 @@ const NumbersList = ({list, filter}) => {
 const App = () => {
   
   const [persons, setPersons] = useState([]) 
-  const [IDCounter, setIDCounter] = useState(0)
   const [filter,    setfilter]    = useState('')
   
   // note that you unroll props passed between components, but you don't unroll when it concerns only other methods
   const updatePersons = (data) => {
     setPersons(data)
-    setIDCounter(data.length)
   }
 
   useEffect( () => {
@@ -114,8 +128,8 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <FilterPrompt stateGetter={filter} stateSetter={setfilter} />
-      <PersonForm peopleList={persons} peopleListSetter={setPersons} idCounter={IDCounter} idCounterSetter={setIDCounter}/>
-      <NumbersList list={persons} filter={filter} />
+      <PersonForm peopleList={persons} peopleListSetter={setPersons} />
+      <NumbersList list={persons} setlist={setPersons} filter={filter} />
     </div>
   )
 }
