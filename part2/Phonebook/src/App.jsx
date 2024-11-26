@@ -1,5 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { nanoid   } from 'nanoid'   // use with nanoid(x) where x is the optional argument for size/length
+import axios    from 'axios'
+
+const SERVER_ADDRESS = 'http://localhost:3001/persons'
 
 const FilterPrompt = ({stateGetter, stateSetter}) => {
   return (
@@ -29,6 +32,13 @@ const PersonForm = ({peopleList, peopleListSetter, idCounter, idCounterSetter}) 
         id:     idCounter
 
       }
+
+      axios
+        .post(SERVER_ADDRESS, newPerson)
+        .then(response => {
+          console.log(response)
+        })
+
       peopleListSetter(peopleList.concat(newPerson))
       idCounterSetter(idCounter + 1)
     }
@@ -87,18 +97,24 @@ const NumbersList = ({list, filter}) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '333',   id: 0 },
-    { name: 'Ada Lovelace', number: '341',  id: 1 },
-    { name: 'Alonso Church', number: '131', id: 2 },
-    { name: 'Alan Turing', number: '321',   id: 3 }
-  ]) 
   
-
-  const [IDCounter, setIDCounter] = useState(4)
+  const [persons, setPersons] = useState([]) 
+  const [IDCounter, setIDCounter] = useState(0)
   const [filter,    setfilter]    = useState('')
   
-  
+  // note that you unroll props passed between components, but you don't unroll when it concerns only other methods
+  const updatePersons = (data) => {
+    setPersons(data)
+    setIDCounter(data.length)
+  }
+
+  useEffect( () => {
+    axios
+      .get(SERVER_ADDRESS)
+      .then(response => {
+        updatePersons(response.data)
+      })
+  }, [])
 
   return (
     <div>
