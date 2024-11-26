@@ -29,8 +29,9 @@ const PersonForm = ({peopleList, peopleListSetter}) => {
   const handleSubmit = (event) => {
     event.preventDefault()
     console.log('submit button clicked', event.target)
-    // check for potential duplicate submission, add if new unique name, else show error message
-    if (peopleList.find(p => p.name === newPersonName) === undefined ) {
+    // check for potential duplicate submission, add if new unique name, else prompt to update info
+    const found = peopleList.find(p => p.name === newPersonName)
+    if ( found === undefined ) {
       const newPerson = {
         name:   newPersonName,
         number: newPersonNumber
@@ -41,11 +42,15 @@ const PersonForm = ({peopleList, peopleListSetter}) => {
         .then(response => {
           console.log(response)
           peopleListSetter(peopleList.concat({...newPerson, id: response.data.id}))
-      })
-      
+        })
     }
     else {
-      alert(`${newPersonName} already exists in the phonebook!`)
+      if (window.confirm(`${newPersonName} already exists in the phonebook. Update with new phone number?`)) {
+        const newPerson = {...found, number: newPersonNumber}
+        personsService
+          .update(newPerson, found.id)
+          .then(response => peopleListSetter(peopleList.map( p => p === found ? newPerson : p )))
+      }
     }
   }
   return (
