@@ -1,2 +1,12 @@
 notes-to-self
 fiddling_around
+
+#
+client/src/unused/
+INSTALL_DEPENDENCIES.txt
+
+#
+.env
+*.env
+.env.*
+env.*
