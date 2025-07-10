@@ -2,6 +2,7 @@
 import express from "npm:express";
 
 import * as notesHandler from "./handlers/notes-handler.ts";
+import * as phonebookHandler from "./handlers/phonebook-handler.ts";
 import { dummyValidator } from "./handlers/dummyValidatorMiddleware.ts"
 
 const PORT = 3001;
@@ -17,6 +18,9 @@ app.get("/api/notes", notesHandler.fetchAllNotes);
 app.get("/api/notes/:id", dummyValidator, notesHandler.fetchOneNote);
 app.post("/api/notes", ...notesHandler.postNewNote);
 app.delete("/api/notes/:id", notesHandler.deleteNote);
+
+// Phonebook
+app.get("/api/persons", phonebookHandler.fetchAllNumbers);
 
 /* Template */ /*
 app.get("/", handler);
