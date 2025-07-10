@@ -1,3 +1,6 @@
+
+import express from "npm:express";
+
 let numbersRespository = [
     { 
       "id": "1",
@@ -50,6 +53,19 @@ const fetchOneNumber = async (request, response) => {
   response.json(foundNumber);
 };
 
+const postNewNumber = [ 
+  express.json(), 
+  async (request, response) => {
+    const newNumber:object = request.body;
+    // find a new unused id randomly
+    let newId = "1";
+    while (numbersRespository.find(n => n.id === newId)) newId = String(Math.floor(Math.random() * 10000000));
+    newNumber.id = newId;
+    // console.log(typeof(newNumber), " - newNumber", newNumber);
+    numbersRespository.push(newNumber); // returns new length
+    response.json(newNumber);
+}];
+
 const deleteNumber = async (request, response) => {
   process.stdout.write(`Deleting number ${request.params.id} \n`);
   const i = numbersRespository.findIndex(n => n.id === request.params.id);
@@ -64,4 +80,4 @@ const deleteNumber = async (request, response) => {
   response.status(204);
 };
 
-export { infoPage, fetchAllNumbers, fetchOneNumber, deleteNumber };
+export { infoPage, fetchAllNumbers, fetchOneNumber, postNewNumber, deleteNumber };
