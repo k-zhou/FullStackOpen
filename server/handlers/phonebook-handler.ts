@@ -50,4 +50,18 @@ const fetchOneNumber = async (request, response) => {
   response.json(foundNumber);
 };
 
-export { infoPage, fetchAllNumbers, fetchOneNumber };
+const deleteNumber = async (request, response) => {
+  process.stdout.write(`Deleting number ${request.params.id} \n`);
+  const i = numbersRespository.findIndex(n => n.id === request.params.id);
+  let deletedNumber:object = {};
+  if (i !== -1) {
+    deletedNumber = numbersRespository.splice(i, 1);
+    console.log(" - Success", deletedNumber);
+  } else {
+    console.log(" - None found"); 
+  }
+  response.json(deletedNumber);
+  response.status(204);
+};
+
+export { infoPage, fetchAllNumbers, fetchOneNumber, deleteNumber };

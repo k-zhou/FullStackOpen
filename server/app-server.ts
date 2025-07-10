@@ -23,6 +23,7 @@ app.delete("/api/notes/:id", notesHandler.deleteNote);
 app.get("/info", phonebookHandler.infoPage);
 app.get("/api/persons", phonebookHandler.fetchAllNumbers);
 app.get("/api/persons/:id", phonebookHandler.fetchOneNumber);
+app.delete("/api/persons/:id", phonebookHandler.deleteNumber);
 
 /* Template */ /*
 app.get("/", handler);
