@@ -22,6 +22,7 @@ app.delete("/api/notes/:id", notesHandler.deleteNote);
 // Phonebook
 app.get("/info", phonebookHandler.infoPage);
 app.get("/api/persons", phonebookHandler.fetchAllNumbers);
+app.get("/api/persons/:id", phonebookHandler.fetchOneNumber);
 
 /* Template */ /*
 app.get("/", handler);

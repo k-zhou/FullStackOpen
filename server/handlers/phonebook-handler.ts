@@ -41,4 +41,13 @@ const fetchAllNumbers = async (request, response) => {
   response.json(numbersRespository);
 };
 
-export { infoPage, fetchAllNumbers };
+const fetchOneNumber = async (request, response) => {
+  const foundNumber = numbersRespository.find(n => n.id === request.params.id);
+  if (!foundNumber) {
+    response.status(403).end();
+    return;
+  }
+  response.json(foundNumber);
+};
+
+export { infoPage, fetchAllNumbers, fetchOneNumber };
