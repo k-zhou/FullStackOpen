@@ -20,6 +20,7 @@ app.post("/api/notes", ...notesHandler.postNewNote);
 app.delete("/api/notes/:id", notesHandler.deleteNote);
 
 // Phonebook
+app.get("/info", phonebookHandler.infoPage);
 app.get("/api/persons", phonebookHandler.fetchAllNumbers);
 
 /* Template */ /*

@@ -27,8 +27,18 @@ const newFun = async (request, response) => {
 };
 */
 
+const infoPage = async (request, response) => {
+  const peopleStr = numbersRespository.length === 1 ? "1 person" : `${numbersRespository.length} people`;
+  const nowMs  = Date.now();
+  const nowStr = (new Date(nowMs)).toUTCString();
+  response.send(`
+    <p>The Phonebook has info for ${peopleStr}.</p>
+    <p>${nowStr}</p>
+    `);
+};
+
 const fetchAllNumbers = async (request, response) => {
   response.json(numbersRespository);
 };
 
-export { fetchAllNumbers };
+export { infoPage, fetchAllNumbers };
