@@ -2,7 +2,7 @@ FROM denoland/deno:latest
 
 WORKDIR /app
 
-COPY deno.json .
+COPY deno.json package.json /app/
 
 RUN DENO_FUTURE=1 deno install
 

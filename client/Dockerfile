@@ -8,4 +8,4 @@ RUN DENO_FUTURE=1 deno install
 
 COPY . .
 
-CMD [ "run", "dev", "--host", "--port=5174" ]
+CMD [ "run", "dev", "--host", "--port=3000" ]

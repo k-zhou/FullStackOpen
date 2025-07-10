@@ -1,8 +1,30 @@
-export function add(a: number, b: number): number {
-  return a + b;
-}
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
-if (import.meta.main) {
-  console.log("Add 2 + 3 =", add(2, 3));
-}
+import express from "npm:express";
+
+import * as notesHandler from "./handlers/notes-handler.ts";
+import { dummyValidator } from "./handlers/dummyValidatorMiddleware.ts"
+
+const PORT = 3001;
+
+const app = express();
+
+app.get("/", (request, response) => {
+  response.send("<h1>Hello World!<h1/>");
+});
+
+// Notes
+app.get("/api/notes", notesHandler.fetchAllNotes);
+app.get("/api/notes/:id", dummyValidator, notesHandler.fetchOneNote);
+app.post("/api/notes", ...notesHandler.postNewNote);
+app.delete("/api/notes/:id", notesHandler.deleteNote);
+
+/* Template */ /*
+app.get("/", handler);
+app.get("/", (req, res) => {
+  res.send("template stuff");
+});
+*/
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}.`);
+});

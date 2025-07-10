@@ -1,9 +1,18 @@
 services:
 
+  server:
+    build: server
+    restart: unless-stopped
+    volumes:
+      - ./server:/app
+    ports:
+      - 3001:3001
   client:
     build: client
     restart: unless-stopped
     volumes:
       - ./client:/app
     ports:
-      - 5174:5174
+      - 3000:3000
+    depends_on:
+      - server
