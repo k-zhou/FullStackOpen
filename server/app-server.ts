@@ -1,5 +1,6 @@
 
 import express from "npm:express";
+import morgan from "npm:morgan";
 
 import * as notesHandler from "./handlers/notes-handler.ts";
 import * as phonebookHandler from "./handlers/phonebook-handler.ts";
@@ -8,6 +9,8 @@ import { dummyValidator } from "./handlers/dummyValidatorMiddleware.ts"
 const PORT = 3001;
 
 const app = express();
+
+app.use(morgan("tiny"));
 
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!<h1/>");
