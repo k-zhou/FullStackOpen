@@ -1,7 +1,9 @@
 
 import express from "npm:express";
+import { zValidator } from "./zValidator.ts";
+import { personSchema, Person } from "./validatorSchema.ts";
 
-let numbersRespository = [
+let numbersRespository:Array<Person> = [
     { 
       "id": "1",
       "name": "Arto Hellas", 
@@ -55,9 +57,16 @@ const fetchOneNumber = async (request, response) => {
 
 const postNewNumber = [ 
   express.json(), 
+  zValidator(personSchema),
   async (request, response) => {
-    const newNumber:object = request.body;
-    // find a new unused id randomly
+    const newNumber:Person = request.body;
+    // Checks for duplicates
+    if (numbersRespository.find(p => p.name === newNumber.name)) {
+      response.json({ error: `${newNumber.name} already exists in the phonebook.` });
+      response.status(403);
+      return;
+    }
+    // Finds a new unused id randomly
     let newId = "1";
     while (numbersRespository.find(n => n.id === newId)) newId = String(Math.floor(Math.random() * 10000000));
     newNumber.id = newId;
