@@ -9,6 +9,7 @@ export default defineConfig( ({mode}) => {
   return {
     define: {
       "process.env.PORT" : env.PORT,
+      "process.env.FRONTEND_PORT": env.FRONTEND_PORT,
       "process.env.PUBLIC_API_URL": JSON.stringify(env.PUBLIC_API_URL),
     },
     plugins: [react()],
