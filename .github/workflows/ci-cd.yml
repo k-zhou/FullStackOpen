@@ -32,8 +32,8 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: kz-fullstackopen
-          entrypoint: index.html
-          root: ./client/dist
+          entrypoint: entrypoint.ts
+          root: ./client/
           
   deploy-server:
     runs-on: ubuntu-latest
