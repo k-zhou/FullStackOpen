@@ -1,5 +1,7 @@
 
 import express from "npm:express";
+// import * as uuid from "npm:uuid";
+import { nanoid } from "npm:nanoid";
 import { zValidator } from "./zValidator.ts";
 import { personSchema, Person } from "./validatorSchema.ts";
 
@@ -67,12 +69,27 @@ const postNewNumber = [
       return;
     }
     // Finds a new unused id randomly
-    let newId = "1";
-    while (numbersRespository.find(n => n.id === newId)) newId = String(Math.floor(Math.random() * 10000000));
+    let newId = nanoid();// uuid.v4(); // while (numbersRespository.find(n => n.id === newId)) newId = String(Math.floor(Math.random() * 10000000));
     newNumber.id = newId;
     // console.log(typeof(newNumber), " - newNumber", newNumber);
     numbersRespository.push(newNumber); // returns new length
     response.json(newNumber);
+}];
+
+const updateNumber = [ 
+  express.json(), 
+  zValidator(personSchema),
+  async (request, response) => {
+    const updatePerson:Person = request.body;
+    // Checks for existing entry and updates it
+    const foundPerson = numbersRespository.find(p => p.name === updatePerson.name);
+    if (foundPerson) {
+      // updates number
+      numbersRespository.forEach(p => p.name === foundPerson.name ? p.number = updatePerson.number : undefined );
+      response.json({ "message": `${foundPerson.name}'s number has been updated.` });
+    } else {
+      response.status(404).end();
+    }
 }];
 
 const deleteNumber = async (request, response) => {
@@ -89,4 +106,4 @@ const deleteNumber = async (request, response) => {
   response.status(204);
 };
 
-export { infoPage, fetchAllNumbers, fetchOneNumber, postNewNumber, deleteNumber };
+export { infoPage, fetchAllNumbers, fetchOneNumber, postNewNumber, updateNumber, deleteNumber };

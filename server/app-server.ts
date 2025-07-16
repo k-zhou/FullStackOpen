@@ -1,14 +1,23 @@
 
+// import dotenv from "npm:dotenv";
 import express from "npm:express";
+import cors from "npm:cors";
 import morgan from "npm:morgan";
 
 import * as notesHandler from "./handlers/notes-handler.ts";
 import * as phonebookHandler from "./handlers/phonebook-handler.ts";
 import { dummyValidator } from "./handlers/dummyValidatorMiddleware.ts"
 
-const PORT = 3001;
+// dotenv.config(); 
+// const test_env = process.env.PORT || 0;
+// console.log(`Server ${test_env}, ${process.env.SERVER_PORT || "unavailable server port"}`);
+const PORT = process.env.SERVER_PORT || 3001;
 
 const app = express();
+const corsOptions = {
+
+};
+app.use(cors());
 
 // Sets up Morgan
 // Defines a new text token for showing the payload
@@ -32,6 +41,7 @@ app.get("/info", phonebookHandler.infoPage);
 app.get("/api/persons", phonebookHandler.fetchAllNumbers);
 app.get("/api/persons/:id", phonebookHandler.fetchOneNumber);
 app.post("/api/persons", ...phonebookHandler.postNewNumber);
+app.post("/api/persons/:id", ...phonebookHandler.updateNumber);
 app.delete("/api/persons/:id", phonebookHandler.deleteNumber);
 
 /* Template */ /*
