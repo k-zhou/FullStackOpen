@@ -3,7 +3,8 @@ import express from "npm:express";
 // import * as uuid from "npm:uuid";
 import { nanoid } from "npm:nanoid";
 import { zValidator } from "./zValidator.ts";
-import { personSchema, Person } from "./validatorSchema.ts";
+import { personSchema } from "./validatorSchema.ts";
+import type { Person } from "../types/person.ts";
 
 let numbersRespository:Array<Person> = [
     { 

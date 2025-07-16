@@ -9,10 +9,4 @@ export const personSchema = z.object({
   number: z.string().min(3)
 });
 
-export type Person = {
-  id?,
-  name,
-  number
-};
-
-// export { templateSchema, personSchema, Person };
+// export { templateSchema, personSchema };
