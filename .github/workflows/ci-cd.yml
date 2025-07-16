@@ -1,0 +1,59 @@
+name: CI/CD
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy-client:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      id-token: write
+      contents: read
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+          
+      - name: Load dependencies
+        run: deno install --allow-scripts
+        working-directory: ./client
+          
+      - name: Build client
+        run: deno run build
+        working-directory: ./client
+        
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: kz-fullstackopen
+          entrypoint: index.html
+          root: ./client/build
+          
+  deploy-server:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      id-token: write
+      contents: read
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+        
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: kz-fullstackbackend
+          entrypoint: app-server.ts
+          root: ./server
