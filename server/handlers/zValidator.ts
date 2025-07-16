@@ -10,9 +10,9 @@ const zValidator = (schema, options={}) => async (request, response, next) => {
   const target = await request.body;
   const result = await schema.safeParseAsync(target);
   if (!result.success) {
-     response.json(result);
-     response.status(400);
-     return;
+    response.status(400); 
+    response.json(result);
+    return;
   }
 
   // Successful parse, continues with the rest of the request as normal
