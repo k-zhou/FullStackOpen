@@ -23,7 +23,14 @@ jobs:
       - name: Load dependencies
         run: deno install --allow-scripts
         working-directory: ./client
-          
+        
+      - name: 'Create env file public'
+        run: |
+          touch .env
+          echo PUBLIC_API_URL=${{vars.PUBLIC_API_URL}} >> .env
+          cat .env
+        working-directory: ./client
+
       - name: Build client
         run: deno run build
         working-directory: ./client
