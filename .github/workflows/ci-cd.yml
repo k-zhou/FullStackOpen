@@ -33,7 +33,7 @@ jobs:
         with:
           project: kz-fullstackopen
           entrypoint: index.html
-          root: ./client/build
+          root: ./client/dist
           
   deploy-server:
     runs-on: ubuntu-latest
