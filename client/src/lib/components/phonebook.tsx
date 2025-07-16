@@ -1,13 +1,14 @@
-import { useState, 
-         useEffect }  from 'react'
-import personsService from '../services/personsService.ts'
+import React, { useState, 
+         useEffect }  from 'react';
+import personsService from '../services/personsService.ts';
 // import { nanoid }     from 'nanoid'   // use with nanoid(x) where x is the optional argument for size/length
+import type { Person } from "../types/person.ts";
 
 const Button = ({onClick, children}:any) => {
-    return (
-      <button onClick={onClick}>{children}</button>
-    )
-  }
+  return (
+    <button onClick={onClick}>{children}</button>
+  );
+};
   
 const FilterPrompt = ({stateGetter, stateSetter}:any) => {
   return (
@@ -18,52 +19,52 @@ const FilterPrompt = ({stateGetter, stateSetter}:any) => {
         onChange={(event) => {stateSetter(event.target.value)}}>
       </input>
     </div>
-  )
-}
+  );
+};
   
 const PersonForm = ({peopleList, peopleListSetter}:any) => {
 
-  const [newPersonName,   setnewPersonName  ] = useState('')
-  const [newPersonNumber, setnewPersonNumber] = useState('')
+  const [newPersonName,   setnewPersonName  ] = useState('');
+  const [newPersonNumber, setnewPersonNumber] = useState('');
 
   const handleSubmit = (event:any) => {
     event.preventDefault()
     console.log('submit button clicked', event.target)
     // Checks for potential duplicate submission, add if new unique name, else prompt to update info
-    const found = peopleList.find(p => p.name === newPersonName)
+    const found = peopleList.find((p:any) => p.name === newPersonName)
     if ( found === undefined ) {
       const newPerson = {
         id:     0,
         name:   newPersonName,
         number: newPersonNumber
-      }
+      };
       // Sends this to the server, takes the id from the response and assigns it to the object
       personsService
         .create(newPerson)
-        .then(response => {
+        .then((response:any) => {
           console.log(response);
           if (response.status === 200) {
-            peopleListSetter(peopleList.concat({...newPerson, id: response.data.id}))
+            peopleListSetter(peopleList.concat({...newPerson, id: response.data.id}));
           }
           else {
             console.log(`Error while creating new phonebook entry.`);
           }
-        })
+        });
     }
     else {
       if (window.confirm(`${newPersonName} already exists in the phonebook. Update with new phone number?`)) {
-        const newPerson = {...found, number: newPersonNumber}
+        const newPerson = {...found, number: newPersonNumber};
         personsService
           .update(newPerson, found.id)
-          .then(response => {
+          .then((response:any) => {
             if (response.status === 200) {
               console.log(response);
-              peopleListSetter(peopleList.map( p => p === found ? newPerson : p ))
+              peopleListSetter(peopleList.map( (p:any) => p === found ? newPerson : p ));
             }
             else {
               console.log(`Error while updating new phonebook entry.`);
             }
-          })
+          });
       }
     }
   }
@@ -102,17 +103,17 @@ const PersonForm = ({peopleList, peopleListSetter}:any) => {
           </div>
         </form>
       </div>
-  )
-}
+  );
+};
     
 const NumbersList = ({list, setlist, filter}:any) => {
     
   const handleRemove = (id:string, name:string) => {
     if (window.confirm(`Are you sure to remove ${name}?`)) {
-        const p = personsService.remove(id)
-        p.then(response => {if (response.status === 200) setlist(list.filter(item => item.id != id)); else return false})
+        const p = personsService.remove(id);
+        p.then((response:any) => {if (response.status === 200) setlist(list.filter((item:any) => item.id != id)); else return false});
     }
-    return true
+    return true;
   }
 
   return (
@@ -120,27 +121,27 @@ const NumbersList = ({list, setlist, filter}:any) => {
       <h2>Numbers</h2>
       <ul>
       {list
-          .filter((person) => person.name.toLowerCase().includes(filter))
-          .map(person => <li key={person.id}>{person.name} ( {person.number} ) <Button onClick={() => handleRemove(person.id, person.name)} children={'delete'} /></li>)}
+          .filter((person:Person) => person.name.toLowerCase().includes(filter))
+          .map((person:any) => <li key={person.id}>{person.name} ( {person.number} ) <Button onClick={() => handleRemove(person.id, person.name)} children={'delete'} /></li>)}
       </ul>
   </div>
-  )
-}
+  );
+};
 
 const Phonebook:any = () => {
-    const [persons, setPersons] = useState([]) 
-    const [filter,  setfilter ] = useState('')
+    const [persons, setPersons] = useState(Array<Person>);
+    const [filter,  setfilter ] = useState('');
   
     // note that you unroll props passed between components, but you don't unroll when it concerns only other methods
-    const updatePersons = (data:object) => {
-        setPersons(data)
+    const updatePersons = (data:Array<Person>) => {
+        setPersons(data);
     }
 
     useEffect( () => {
-        personsService.getAll().then(response => {
-        updatePersons(response.data)
-        })
-    }, [])
+        personsService.getAll().then((response:any) => {
+        updatePersons(response.data);
+        });
+    }, []);
 
     return (
       <div>
@@ -149,7 +150,7 @@ const Phonebook:any = () => {
         <PersonForm peopleList={persons} peopleListSetter={setPersons} />
         <NumbersList list={persons} setlist={setPersons} filter={filter} />
       </div>
-    )
-}
+    );
+};
 
-export default Phonebook
+export default Phonebook;
