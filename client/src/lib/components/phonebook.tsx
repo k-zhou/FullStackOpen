@@ -1,5 +1,4 @@
-import React, { useState, 
-         useEffect }  from 'react';
+import { useState, useEffect }  from 'react';
 import personsService from '../services/personsService.ts';
 // import { nanoid }     from 'nanoid'   // use with nanoid(x) where x is the optional argument for size/length
 import type { Person } from "../types/person.ts";
