@@ -1,16 +1,14 @@
-import './App.css'
-import { tester } from "./lib/states/tester.tsx";
 
-function App() {
-  console.log(tester);
+import Phonebook from "./lib/components/phonebook.tsx";
+import "./App.css";
+
+const App = () => {
+  
   return (
     <div>
-      <p>Hello World!</p>
-      <button onClick={() => console.log("You've clicked the button.")}>
-      Count: {tester.join(', ')}
-      </button>
+      <Phonebook />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
