@@ -32,7 +32,7 @@ jobs:
         working-directory: ./client
 
       - name: Build client
-        run: deno run build
+        run: deno run --env=../.env build
         working-directory: ./client
         
       - name: Upload to Deno Deploy
