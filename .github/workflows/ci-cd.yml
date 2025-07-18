@@ -10,7 +10,10 @@ jobs:
     permissions:
       id-token: write
       contents: read
-      
+    
+    # This selects which set of env variables defined in this repo to use
+    environment: Production
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
