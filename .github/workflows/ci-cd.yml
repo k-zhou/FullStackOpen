@@ -29,7 +29,7 @@ jobs:
           touch .env
           echo PUBLIC_API_URL=${{vars.PUBLIC_API_URL}} >> .env
           cat .env
-        working-directory: ./client
+        working-directory: ./
 
       - name: Build client
         run: deno run --env=../.env build
