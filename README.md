@@ -1,6 +1,10 @@
 ## Fullstackopen
 Helsinki Open University course
 
+## Deployed Sites
+Frontend at: https://kz-fullstackopen.deno.dev
+Backend at:  https://kz-fullstackbackend.deno.dev
+
 ## File Layout
 The files are organised by the part/chapter of the course they are created in. Part 1 contains the projects
 - Course-info
