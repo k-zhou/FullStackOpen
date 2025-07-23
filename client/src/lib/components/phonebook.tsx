@@ -110,7 +110,7 @@ const NumbersList = ({list, setlist, filter}:any) => {
   const handleRemove = (id:string, name:string) => {
     if (window.confirm(`Are you sure to remove ${name}?`)) {
         const p = personsService.remove(id);
-        p.then((response:any) => {if (response.status === 200) setlist(list.filter((item:any) => item.id != id)); else return false});
+        p.then((response:any) => {if (response.status === 200 || 204) setlist(list.filter((item:any) => item.id != id)); else return false});
     }
     return true;
   }
