@@ -1,34 +1,8 @@
 
 import express from "npm:express";
-// import * as uuid from "npm:uuid";
-import { nanoid } from "npm:nanoid";
-import { zValidator } from "./zValidator.ts";
 import { personSchema } from "../types/person-schema-mongoose.ts";
 import type { Person } from "../types/person.ts";
 import { database } from "./mongo.ts";
-
-// let numberRepository:Array<Person> = [
-//     { 
-//       "id": "1",
-//       "name": "Arto Hellas", 
-//       "number": "040-123456"
-//     },
-//     { 
-//       "id": "2",
-//       "name": "Ada Lovelace", 
-//       "number": "39-44-5323523"
-//     },
-//     { 
-//       "id": "3",
-//       "name": "Dan Abramov", 
-//       "number": "12-43-234345"
-//     },
-//     { 
-//       "id": "4",
-//       "name": "Mary Poppendieck", 
-//       "number": "39-23-6423122"
-//     }
-// ];
 
 const numberRepository = database.model("persons", personSchema);
 
@@ -73,14 +47,12 @@ const fetchOneNumber = async (request, response) => {
 
 const postNewNumber = [ 
   express.json(), 
-  // zValidator(personSchema),
   async (request, response) => {
     const receivedNumber:Person = request.body;
     // Checks for duplicates
     numberRepository
       .find({ name: receivedNumber.name})
       .then(result => {
-        // console.log(result); // GDPR
         if (result.length) {
           response.status(403);
           response.json({ error: `${receivedNumber.name} already exists in the phonebook.` });
@@ -107,14 +79,12 @@ const postNewNumber = [
 
 const updateNumber = [ 
   express.json(), 
-  // zValidator(personSchema),
   async (request, response) => {
     const receivedNumber:Person = request.body;
     // Checks for existing entry and updates it
     numberRepository
       .findByIdAndUpdate(request.params.id)
       .then(result => {
-        // console.log(result); // GDPR
         response.json({ "message": `${receivedNumber.name}'s number has been updated.` });
       })
       .catch(err => {
@@ -130,7 +100,6 @@ const deleteNumber = async (request, response) => {
     .then(result => {
         response.status(204);
         response.json(result);
-        // console.log(result); // GDPR
     })
     .catch(err => {
       response.status(500).end();
