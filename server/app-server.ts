@@ -6,6 +6,8 @@ import morgan from "npm:morgan";
 
 import * as notes from "./endpoints/notes.ts";
 import * as phonebook from "./endpoints/phonebook.ts";
+import { unknownEndpoint } from "./endpoints/unknownEndpoint.ts";
+
 import { dummyValidator } from "./handlers/dummyValidatorMiddleware.ts"
 
 import { errorMiddlesware } from "./handlers/errorMiddleware.ts";
@@ -53,6 +55,7 @@ app.get("/", (req, res) => {
 });
 */
 
+app.use(unknownEndpoint);
 app.use(errorMiddlesware);
 
 app.listen(PORT, () => {
