@@ -17,7 +17,7 @@ const create:any = (newObj:object) => {
 
 const update:any = (newObj:object, id:string) => {
     return axios
-            .post(`${SERVER_ADDRESS}/api/persons/${id}`, newObj)
+            .put(`${SERVER_ADDRESS}/api/persons/${id}`, newObj)
             .catch(response => console.log(`POST Update Error: ${response}`))
 }
 

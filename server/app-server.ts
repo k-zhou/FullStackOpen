@@ -45,7 +45,7 @@ app.get("/info", phonebook.infoPage);
 app.get("/api/persons", phonebook.fetchAllNumbers);
 app.get("/api/persons/:id", phonebook.fetchOneNumber);
 app.post("/api/persons", ...phonebook.postNewNumber);
-app.post("/api/persons/:id", ...phonebook.updateNumber);
+app.put("/api/persons/:id", ...phonebook.updateNumber);
 app.delete("/api/persons/:id", phonebook.deleteNumber);
 
 /* Template */ /*

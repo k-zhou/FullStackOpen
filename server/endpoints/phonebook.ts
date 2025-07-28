@@ -79,7 +79,7 @@ const updateNumber = [
     const receivedNumber:Person = request.body;
     // Checks for existing entry and updates it
     numberRepository
-      .findByIdAndUpdate(request.params.id)
+      .findByIdAndUpdate(receivedNumber.id, receivedNumber)
       .then(result => {
         response.json({ "message": `${receivedNumber.name}'s number has been updated.` });
       })
