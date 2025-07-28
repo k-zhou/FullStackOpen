@@ -6,7 +6,7 @@ import { database } from "../handlers/mongo.ts";
 
 const numberRepository = database.model("persons", personSchema);
 
-const infoPage = async (request, response) => {
+const infoPage = async (request, response) => { 
   const count = await numberRepository.collection.countDocuments();
   const peopleStr = count === 1 ? "1 person" : `${count} people`;
   const nowMs  = Date.now();
@@ -29,7 +29,7 @@ const fetchAllNumbers = async (request, response, next) => {
     });
 };
 
-const fetchOneNumber = async (request, response, next) => {
+const fetchOneNumber = async (request, response, next) => { 
   numberRepository
     .findById(request.params.id)
     .then(result => {
