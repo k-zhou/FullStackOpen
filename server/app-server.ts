@@ -8,6 +8,8 @@ import * as notes from "./endpoints/notes.ts";
 import * as phonebook from "./endpoints/phonebook.ts";
 import { dummyValidator } from "./handlers/dummyValidatorMiddleware.ts"
 
+import { errorMiddlesware } from "./handlers/errorMiddleware.ts";
+
 // dotenv.config(); 
 // const test_env = process.env.PORT || 0;
 // console.log(`Server ${test_env}, ${process.env.SERVER_PORT || "unavailable server port"}`);
@@ -50,6 +52,8 @@ app.get("/", (req, res) => {
   res.send("template stuff");
 });
 */
+
+app.use(errorMiddlesware);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}.`);

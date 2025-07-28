@@ -17,37 +17,33 @@ const infoPage = async (request, response) => {
     `);
 };
 
-const fetchAllNumbers = async (request, response) => {
+const fetchAllNumbers = async (request, response, next) => {
   numberRepository
     .find({})
     .then(result => {
       response.json(result);
     })
     .catch(error => {
-      response.statusMessage = "Error with fetching all numbers.";
-      response.status(404).end();
       console.log("[!] fetchAllNumbers error");
-      console.log(JSON.stringify(error));
+      next(error);
     });
 };
 
-const fetchOneNumber = async (request, response) => {
+const fetchOneNumber = async (request, response, next) => {
   numberRepository
     .findById(request.params.id)
     .then(result => {
       response.json(result);
     })
     .catch(error => {
-      response.statusMessage = "No such person has been found.";
-      response.status(404).end();
       console.log("[!] fetchOneNumber error");
-      console.log(error);
+      next(error);
     });
 };
 
 const postNewNumber = [ 
   express.json(), 
-  async (request, response) => {
+  async (request, response, next) => {
     const receivedNumber:Person = request.body;
     // Checks for duplicates
     numberRepository
@@ -64,22 +60,22 @@ const postNewNumber = [
             .then(result => {
               response.json({ message: `${receivedNumber.name} added to the phonebook.`});
             })
-            .catch(err => {
+            .catch(error => {
               console.log("[!] postNewNumber error - saving");
-              console.log(err);
+              next(error);
             });
         }
         
       })
-      .catch(err => {
+      .catch(error => {
         console.log("[!] postNewNumber error - finding");
-        console.log(err);
+        next(error);
       });
 }];
 
 const updateNumber = [ 
   express.json(), 
-  async (request, response) => {
+  async (request, response, next) => {
     const receivedNumber:Person = request.body;
     // Checks for existing entry and updates it
     numberRepository
@@ -87,13 +83,13 @@ const updateNumber = [
       .then(result => {
         response.json({ "message": `${receivedNumber.name}'s number has been updated.` });
       })
-      .catch(err => {
+      .catch(error => {
         console.log("[!] updateNumber error");
-        console.log(err);
+        next(error);
       });
 }];
 
-const deleteNumber = async (request, response) => {
+const deleteNumber = async (request, response, next) => {
   process.stdout.write(`Deleting number ${request.params.id} \n`);
   numberRepository
     .findByIdAndDelete(request.params.id)
@@ -101,10 +97,10 @@ const deleteNumber = async (request, response) => {
         response.status(204);
         response.json(result);
     })
-    .catch(err => {
+    .catch(error => {
       response.status(500).end();
       console.log("[!] deleteNumber error");
-      console.log(err);
+      next(error);
     });
 };
 
