@@ -4,8 +4,8 @@ import express from "npm:express";
 import cors from "npm:cors";
 import morgan from "npm:morgan";
 
-import * as notesHandler from "./handlers/notes-handler.ts";
-import * as phonebookHandler from "./handlers/phonebook-handler.ts";
+import * as notes from "./endpoints/notes.ts";
+import * as phonebook from "./endpoints/phonebook.ts";
 import { dummyValidator } from "./handlers/dummyValidatorMiddleware.ts"
 
 // dotenv.config(); 
@@ -31,18 +31,18 @@ app.get("/", (request, response) => {
 });
 
 // Notes
-app.get("/api/notes", notesHandler.fetchAllNotes);
-app.get("/api/notes/:id", dummyValidator, notesHandler.fetchOneNote);
-app.post("/api/notes", ...notesHandler.postNewNote);
-app.delete("/api/notes/:id", notesHandler.deleteNote);
+app.get("/api/notes", notes.fetchAllNotes);
+app.get("/api/notes/:id", dummyValidator, notes.fetchOneNote);
+app.post("/api/notes", ...notes.postNewNote);
+app.delete("/api/notes/:id", notes.deleteNote);
 
 // Phonebook
-app.get("/info", phonebookHandler.infoPage);
-app.get("/api/persons", phonebookHandler.fetchAllNumbers);
-app.get("/api/persons/:id", phonebookHandler.fetchOneNumber);
-app.post("/api/persons", ...phonebookHandler.postNewNumber);
-app.post("/api/persons/:id", ...phonebookHandler.updateNumber);
-app.delete("/api/persons/:id", phonebookHandler.deleteNumber);
+app.get("/info", phonebook.infoPage);
+app.get("/api/persons", phonebook.fetchAllNumbers);
+app.get("/api/persons/:id", phonebook.fetchOneNumber);
+app.post("/api/persons", ...phonebook.postNewNumber);
+app.post("/api/persons/:id", ...phonebook.updateNumber);
+app.delete("/api/persons/:id", phonebook.deleteNumber);
 
 /* Template */ /*
 app.get("/", handler);

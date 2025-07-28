@@ -2,7 +2,7 @@
 import express from "npm:express";
 import { personSchema } from "../types/person-schema-mongoose.ts";
 import type { Person } from "../types/person.ts";
-import { database } from "./mongo.ts";
+import { database } from "../handlers/mongo.ts";
 
 const numberRepository = database.model("persons", personSchema);
 
