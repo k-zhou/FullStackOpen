@@ -89,7 +89,7 @@ const updateNumber = [
       });
 }];
 
-const deleteNumber = async (request, response, next) => {
+const deleteNumber = async (request, response, next) => { 
   process.stdout.write(`Deleting number ${request.params.id} \n`);
   numberRepository
     .findByIdAndDelete(request.params.id)
