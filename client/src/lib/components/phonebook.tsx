@@ -1,6 +1,8 @@
 import { useState, useEffect }  from 'react';
+import { useSelector, useDispatch } from "react-redux"
 import personsService from '../services/personsService.ts';
 // import { nanoid }     from 'nanoid'   // use with nanoid(x) where x is the optional argument for size/length
+import { setPersons, setPersonFilter } from '../reducers/phonebookReducers.ts';
 import type { Person } from "../types/person.ts";
 
 const Button = ({onClick, children}:any) => {
@@ -9,7 +11,11 @@ const Button = ({onClick, children}:any) => {
   );
 };
   
-const FilterPrompt = ({stateGetter, stateSetter}:any) => {
+const FilterPrompt = () => {
+
+  const dispatch = useDispatch();
+  const stateGetter = useSelector(state => state.personFilter);
+  const stateSetter = (input:any) => dispatch(setPersonFilter(input));
   return (
     <div>
       Filter names: 
@@ -20,11 +26,14 @@ const FilterPrompt = ({stateGetter, stateSetter}:any) => {
     </div>
   );
 };
-  
-const PersonForm = ({peopleList, peopleListSetter}:any) => {
+
+const PersonForm = () => {
 
   const [newPersonName,   setnewPersonName  ] = useState('');
   const [newPersonNumber, setnewPersonNumber] = useState('');
+  const dispatch = useDispatch();
+  const peopleList = useSelector(state => state.persons);
+  const peopleListSetter = (input:any) => dispatch(setPersons(input));
 
   const handleSubmit = (event:any) => {
     event.preventDefault()
@@ -105,8 +114,13 @@ const PersonForm = ({peopleList, peopleListSetter}:any) => {
   );
 };
     
-const NumbersList = ({list, setlist, filter}:any) => {
-    
+const NumbersList = () => {
+  
+  const dispatch = useDispatch();
+  const list = useSelector(state => state.persons);
+  const setlist = (input:any) => dispatch(setPersons(input));
+  const filter = useSelector(state => state.personFilter);
+  
   const handleRemove = (id:string, name:string) => {
     if (window.confirm(`Are you sure to remove ${name}?`)) {
         const p = personsService.remove(id);
@@ -128,26 +142,32 @@ const NumbersList = ({list, setlist, filter}:any) => {
 };
 
 const Phonebook:any = () => {
-    const [persons, setPersons] = useState(Array<Person>);
-    const [filter,  setfilter ] = useState('');
   
     // note that you unroll props passed between components, but you don't unroll when it concerns only other methods
+    const dispatch = useDispatch();
     const updatePersons = (data:Array<Person>) => {
-        setPersons(data);
+      dispatch(setPersons(data));
     }
 
     useEffect( () => {
-        personsService.getAll().then((response:any) => {
-        updatePersons(response.data);
+      personsService
+        .getAll()
+        .then((response:any) => {
+          updatePersons(response.data);
         });
     }, []);
 
     return (
       <div>
         <h1>Phonebook</h1>
-        <FilterPrompt stateGetter={filter} stateSetter={setfilter} />
-        <PersonForm peopleList={persons} peopleListSetter={setPersons} />
-        <NumbersList list={persons} setlist={setPersons} filter={filter} />
+        <FilterPrompt />
+        <PersonForm />
+        <NumbersList />
+        {/* <button
+          onClick={() => {console.log("Persons:", persons);}}
+          >
+          Check
+        </button> */}
       </div>
     );
 };
