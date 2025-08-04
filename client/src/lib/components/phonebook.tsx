@@ -3,17 +3,40 @@ import { useSelector, useDispatch } from "react-redux"
 import personsService from '../services/personsService.ts';
 // import { nanoid }     from 'nanoid'   // use with nanoid(x) where x is the optional argument for size/length
 import { setPersons, setPersonFilter } from '../reducers/phonebookReducers.ts';
+import { setMessage } from "../reducers/messageReducer.ts";
 import type { Person } from "../types/person.ts";
+
+let dispatch:any;
+let updateMessage:any;
 
 const Button = ({onClick, children}:any) => {
   return (
     <button onClick={onClick}>{children}</button>
   );
 };
+
+const Message = () => {
+  const [hidden, setHidden] = useState(true);
+  // const dispatch = useDispatch();
+  const message  = useSelector(state => state.message);
+  updateMessage = (input:String) => {
+    dispatch(setMessage(input));
+    if (input === "Messages and notifications come here") setHidden(true); else setHidden(false);
+  };
+  
+  return (
+    <div>
+      <h3>
+        {message}
+      </h3>
+      <button hidden={hidden} onClick={() => updateMessage("Messages and notifications come here")}>Clear message</button>
+    </div>
+  );
+};
   
 const FilterPrompt = () => {
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const stateGetter = useSelector(state => state.personFilter);
   const stateSetter = (input:any) => dispatch(setPersonFilter(input));
   return (
@@ -31,7 +54,7 @@ const PersonForm = () => {
 
   const [newPersonName,   setnewPersonName  ] = useState('');
   const [newPersonNumber, setnewPersonNumber] = useState('');
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const peopleList = useSelector(state => state.persons);
   const peopleListSetter = (input:any) => dispatch(setPersons(input));
 
@@ -55,6 +78,8 @@ const PersonForm = () => {
             peopleListSetter(peopleList.concat({...newPerson, id: response.data.id}));
           }
           else {
+            updateMessage(`[!] Creating: ${response.response.data.error}`);
+            // <p style="color:Tomato;"></p>
             console.log(`Error while creating new phonebook entry.`);
           }
         });
@@ -70,6 +95,7 @@ const PersonForm = () => {
               peopleListSetter(peopleList.map( (p:any) => p === found ? newPerson : p ));
             }
             else {
+              updateMessage(`[!] Updating: ${response.response.data.error}`);
               console.log(`Error while updating new phonebook entry.`);
             }
           });
@@ -116,7 +142,7 @@ const PersonForm = () => {
     
 const NumbersList = () => {
   
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const list = useSelector(state => state.persons);
   const setlist = (input:any) => dispatch(setPersons(input));
   const filter = useSelector(state => state.personFilter);
@@ -124,7 +150,14 @@ const NumbersList = () => {
   const handleRemove = (id:string, name:string) => {
     if (window.confirm(`Are you sure to remove ${name}?`)) {
         const p = personsService.remove(id);
-        p.then((response:any) => {if (response.status === 200 || 204) setlist(list.filter((item:any) => item.id != id)); else return false});
+        p.then((response:any) => {
+          if (response.status === 200 || 204) 
+            setlist(list.filter((item:any) => item.id != id)); 
+          else {
+            updateMessage(`Error while removing.`);
+            return false;
+          }
+        });
     }
     return true;
   }
@@ -144,22 +177,26 @@ const NumbersList = () => {
 const Phonebook:any = () => {
   
     // note that you unroll props passed between components, but you don't unroll when it concerns only other methods
-    const dispatch = useDispatch();
+    dispatch = useDispatch();
     const updatePersons = (data:Array<Person>) => {
       dispatch(setPersons(data));
     }
 
     useEffect( () => {
+      // Fetch all phone numbers upon page load
       personsService
         .getAll()
         .then((response:any) => {
           updatePersons(response.data);
         });
+      // Set default message
+      updateMessage("Messages and notifications come here");
     }, []);
 
     return (
       <div>
         <h1>Phonebook</h1>
+        <Message />
         <FilterPrompt />
         <PersonForm />
         <NumbersList />

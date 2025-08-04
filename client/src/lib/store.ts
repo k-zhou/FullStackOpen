@@ -1,8 +1,10 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import phonebookReducers from "./reducers/phonebookReducers.ts";
+import messageReducer    from "./reducers/messageReducer.ts";
 
 const reducers = combineReducers({ 
-  ...phonebookReducers 
+  ...phonebookReducers,
+  ...messageReducer
 });
 
 const store = configureStore({ reducer: reducers });
