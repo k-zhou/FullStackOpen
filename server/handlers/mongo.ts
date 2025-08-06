@@ -2,7 +2,7 @@
 import dotenv from "npm:dotenv";
 import mongoose from "npm:mongoose";
 
-dotenv.config({ path: `${process.cwd()}/../../.env`, debug: true });
+dotenv.config({ path: `${process.cwd()}/../.env`, debug: true });
 console.log("Loading monolith database URI...");
 let credentials  = process.env.MONGODB;
 const dbProtocol = "mongodb+srv";
@@ -21,8 +21,8 @@ const database = mongoose;
 await database.connect(credentials).then(response => {
   console.log(`Successfully connected to ${dbName}`);
 }).catch(error => {
-  console.log("Cannot connect to Mongo:", error.message);
-  process.exit(1);
+  console.log("[!] Cannot connect to Mongo:", error.message);
+  // process.exit(1);
 });
 
 export { database };
