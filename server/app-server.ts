@@ -1,8 +1,8 @@
 
-// import dotenv from "npm:dotenv";
-import express from "npm:express";
-import cors from "npm:cors";
-import morgan from "npm:morgan";
+// import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
 
 import * as notes from "./endpoints/notes.ts";
 import * as phonebook from "./endpoints/phonebook.ts";

@@ -1,5 +1,5 @@
 
-import mongoose from "npm:mongoose";
+import mongoose from "mongoose";
 
 const personSchema = new mongoose.Schema({
   name:   {

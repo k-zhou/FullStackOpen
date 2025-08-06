@@ -1,6 +1,6 @@
 
-import dotenv from "npm:dotenv";
-import mongoose from "npm:mongoose";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 
 dotenv.config({ path: `${process.cwd()}/../.env`, debug: true });
 console.log("Loading monolith database URI...");

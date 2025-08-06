@@ -1,5 +1,5 @@
-import express from "npm:express";
-import cors from "npm:cors";
+import express from "express";
+import cors from "cors";
 
 const app = express();
 app.use(cors());
