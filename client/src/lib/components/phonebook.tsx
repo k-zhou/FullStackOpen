@@ -1,5 +1,5 @@
 import { useState, useEffect }  from 'react';
-import { useSelector, useDispatch } from "react-redux"
+import { useAppSelector, useAppDispatch } from "../hooks.ts"
 import personsService from '../services/personsService.ts';
 // import { nanoid }     from 'nanoid'   // use with nanoid(x) where x is the optional argument for size/length
 import { setPersons, setPersonFilter } from '../reducers/phonebookReducers.ts';
@@ -17,8 +17,8 @@ const Button = ({onClick, children}:any) => {
 
 const Message = () => {
   const [hidden, setHidden] = useState(true);
-  // const dispatch = useDispatch();
-  const message  = useSelector(state => state.message);
+  // const dispatch = useAppDispatch();
+  const message  = useAppSelector(state => state.message);
   updateMessage = (input:String) => {
     dispatch(setMessage(input));
     if (input === "Messages and notifications come here") setHidden(true); else setHidden(false);
@@ -36,8 +36,8 @@ const Message = () => {
   
 const FilterPrompt = () => {
 
-  // const dispatch = useDispatch();
-  const stateGetter = useSelector(state => state.personFilter);
+  // const dispatch = useAppDispatch();
+  const stateGetter = useAppSelector(state => state.personFilter);
   const stateSetter = (input:any) => dispatch(setPersonFilter(input));
   return (
     <div>
@@ -54,8 +54,8 @@ const PersonForm = () => {
 
   const [newPersonName,   setnewPersonName  ] = useState('');
   const [newPersonNumber, setnewPersonNumber] = useState('');
-  // const dispatch = useDispatch();
-  const peopleList = useSelector(state => state.persons);
+  // const dispatch = useAppDispatch();
+  const peopleList = useAppSelector(state => state.persons);
   const peopleListSetter = (input:any) => dispatch(setPersons(input));
 
   const handleSubmit = (event:any) => {
@@ -142,10 +142,10 @@ const PersonForm = () => {
     
 const NumbersList = () => {
   
-  // const dispatch = useDispatch();
-  const list = useSelector(state => state.persons);
+  // const dispatch = useAppDispatch();
+  const list = useAppSelector(state => state.persons);
   const setlist = (input:any) => dispatch(setPersons(input));
-  const filter = useSelector(state => state.personFilter);
+  const filter = useAppSelector(state => state.personFilter);
   
   const handleRemove = (id:string, name:string) => {
     if (window.confirm(`Are you sure to remove ${name}?`)) {
@@ -177,7 +177,7 @@ const NumbersList = () => {
 const Phonebook:any = () => {
   
     // note that you unroll props passed between components, but you don't unroll when it concerns only other methods
-    dispatch = useDispatch();
+    dispatch = useAppDispatch();
     const updatePersons = (data:Array<Person>) => {
       dispatch(setPersons(data));
     }
